@@ -1,55 +1,72 @@
+import { useEffect, useState } from 'react'
+
 import SearchBar from './SearchBar/SearchBar';
 import SearchResults from './SearchResults/SearchResults';
 import Playlist from './Playlist/Playlist';
 
-import { useState } from 'react'
 import "./App.css"
+import { spotify } from '../util/spotify';
+import useSpotify from '../util/useSpotify';
 
 function App() {
-  const [searchResults, setSearchResults] = useState([
-    {
-      id: 1,
-      name: "Sarun Daunghirun",
-      artist: "Sarun",
-      album: "SADBOY"
-    },
-    {
-      id: 2,
-      name: "Jason Lopez",
-      artist: "Jason",
-      album: "Lonely boys"
-    }
-  ]);
+  const { token, authorization, query, save } = useSpotify();
 
-  const [playlistName, setPlaylistName] = useState("/vibe");
-
-  const [playlistTracks, setPlaylistTracks] = useState([
-    {
-      id: 1,
-      name: "Sarun Daunghirun",
-      artist: "Sarun",
-      album: "SADBOY"
-    },
-    {
-      id: 2,
-      name: "Jason Lopez",
-      artist: "Jason",
-      album: "Lonely boys"
-    }
-  ]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [playlistName, setPlaylistName] = useState("");
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
   function addTrack(track) {
-    
+    let isDuplipcateTrack = playlistTracks.find(savedTrack => savedTrack.id === track.id);
+    if (isDuplipcateTrack) return;
+
+    setPlaylistTracks(prev => {
+      return [
+        ...prev,
+        track
+      ]
+    })
   }
+
+  function removeTrack(track) {
+    setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id != track.id));
+  }
+
+  function updatePlaylistName(name) {
+    setPlaylistName(name.trim());
+  }
+
+  /**
+   * Generates an array of uri values called trackURIs from the playlistTracks property.
+   * In a later step, you will pass the trackURIs array and playlistName to a method that will save the user’s playlist to their account.
+   */
+  async function savePlaylist() {
+    const trackURIs = [];
+    for (let i = 0; i < playlistTracks.length; i++) {
+      let { uri } = playlistTracks[i];
+      trackURIs.push(uri);
+    }
+    save(playlistName ?? "Test Playlist", trackURIs);
+  }
+
+  /**
+   * Allows a user to enter a search parameter, receives a response from the Spotify API, and updates the searchResults state with the results from a Spotify request.
+   */
+  async function search(songSearch) {
+    if (!songSearch) return;
+    const rs = await query(songSearch);
+    setSearchResults(rs);
+  }
+
 
   return (
     <div>
       <h1>Ja<span className="highlight">mmm</span>ing</h1>
+      {!token ? <button onClick={() => authorization()}>Login</button> : <h1>I'm in!</h1>}
       <div className="App">
-        <SearchBar />
+        <SearchBar onSearch={search} />
         <div className="App-playlist">
-          <SearchResults searchResults={searchResults}  />
-          <Playlist playlistName={playlistName} playlistTracks={playlistTracks} />
+          <SearchResults searchResults={searchResults} onAdd={addTrack} />
+          <Playlist playlistName={playlistName} playlistTracks={playlistTracks} onRemove={removeTrack} onNameChange={updatePlaylistName} onSave={savePlaylist} />
         </div>
       </div>
     </div>
