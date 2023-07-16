@@ -6,3 +6,9 @@ This project following on codecademy with function component. instead class comp
 # Tools
 - React
 - Spotify API
+
+# Todos
+- [ ] Refactor Code
+- [ ] Add music preview
+- [ ] Add cover
+- [ ] Auto search
