@@ -5,4 +5,4 @@ This project following on codecademy with function component. instead class comp
 
 # Tools
 - React
-- Spotify API
+- [Spotify API](https://developer.spotify.com/documentation/web-api)
