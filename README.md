@@ -8,10 +8,10 @@ This project following on codecademy with function component. instead class comp
 - Spotify API
 
 # Todos
-core features
+### core features
 - [x] Search track
 - [x] Add new playlist with tracks
-additional features
+### additional features
 - [ ] Refactor Code
 - [ ] Add music preview
 - [ ] Add cover
