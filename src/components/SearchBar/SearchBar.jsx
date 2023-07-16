@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./SearchBar.css"
 
 export default function SearchBar({ onSearch }) {
     const [searchText, setSearchText] = useState("");
 
-    function search() {
+    function search(e) {
+        e.preventDefault();
         onSearch(searchText);
     }
 
@@ -12,10 +13,22 @@ export default function SearchBar({ onSearch }) {
         setSearchText(e.target.value);
     }
 
+    useEffect(() => {
+        console.log("Start side effect");
+        let timeoutId = setTimeout(() => {
+            onSearch(searchText);
+        }, 500);
+        return () => {
+            clearTimeout(timeoutId);
+            console.log("Clean Up");
+        }
+    }, [searchText])
+
     return (
         <div className="SearchBar">
-            <input placeholder="Enter A Song, Album, or Artist" onChange={handleSongSearchChange} value={searchText} />
-            <button className="SearchButton" onClick={() => search()}>SEARCH</button>
+            <form onSubmit={search}>
+                <input placeholder="Enter A Song, Album, or Artist" onChange={handleSongSearchChange} value={searchText} />
+            </form>
         </div>
     )
 }
