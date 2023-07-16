@@ -17,7 +17,7 @@ const spotify = {
   authorization: function() {
     let stateKey = "spotify_auth_state"
 
-    let client_id = '';
+    let client_id = '7505cb9d312241aab74ffb8706c5ba58';
     let redirect_uri = 'http://localhost:5173/';
 
     let state = this.generateRandomString(16);
