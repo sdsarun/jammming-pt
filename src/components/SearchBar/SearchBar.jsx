@@ -14,13 +14,11 @@ export default function SearchBar({ onSearch }) {
     }
 
     useEffect(() => {
-        console.log("Start side effect");
         let timeoutId = setTimeout(() => {
             onSearch(searchText);
         }, 500);
         return () => {
             clearTimeout(timeoutId);
-            console.log("Clean Up");
         }
     }, [searchText])
 
