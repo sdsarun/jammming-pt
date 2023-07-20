@@ -5,7 +5,6 @@ import SearchResults from './SearchResults/SearchResults';
 import Playlist from './Playlist/Playlist';
 
 import "./App.css"
-import { spotify } from '../util/spotify';
 import useSpotify from '../util/useSpotify';
 
 function App() {
@@ -56,7 +55,6 @@ function App() {
     const rs = await query(songSearch);
     setSearchResults(rs);
   }
-
 
   return (
     <div>
